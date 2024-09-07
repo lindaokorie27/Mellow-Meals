@@ -37,6 +37,6 @@ jobs:
       - uses: nrwl/nx-set-shas@v4
 
       # Prepend any command with "nx-cloud record --" to record its logs to Nx Cloud
-      - run: pnpm exec nx-cloud record -- nx format:check --base=$NX_BASE --head=$NX_HEAD
+      - run: pnpm exec nx-cloud record -- nx format:check --base=origin/main
       # Nx Affected runs only tasks affected by the changes in this PR/commit. Learn more: https://nx.dev/ci/features/affected
-      - run: pnpm exec nx affected --base=$NX_BASE --head=$NX_HEAD -t lint test build
+      - run: pnpm exec nx affected -t lint test build --base=origin/main
