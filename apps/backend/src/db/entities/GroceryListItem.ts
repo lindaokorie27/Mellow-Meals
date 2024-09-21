@@ -10,6 +10,9 @@ export class GroceryListItem {
   @Column({ type: 'int' })
   quantity: number;
 
+  @Column({ type: 'varchar', length: 50 })
+  unit: string;  // e.g., grams, liters, cups
+  
   @ManyToOne(() => GroceryList, (groceryList) => groceryList.groceryListItems)
   groceryList: GroceryList;
 
