@@ -1,19 +1,37 @@
-import {Entity, PrimaryGeneratedColumn, Column, JoinColumn, OneToOne} from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany } from 'typeorm';
+import { User } from './User';
+import { RecipeIngredient } from './RecipeIngredient';
+import { RecipeGroceryList } from './RecipeGroceryList';
 
-import { Recipe } from "./Recipe";
-import { List } from "./List";
-
-@Entity()
+@Entity('recipe_list')
 export class RecipeList {
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
-    @PrimaryGeneratedColumn("uuid")
-    id: string;
+  @Column({ type: 'varchar', length: 255 })
+  title: string;
 
-    @OneToOne(() => Recipe)
-    @JoinColumn()
-    recipeId: string;
+  @Column({ type: 'text' })
+  description: string;
 
-    @OneToOne(() => List)
-    @Column()
-    listId: string;
+  @Column({ type: 'text', nullable: true })
+  link: string;  // For recipes added by link, this stores the URL (nullable)
+
+  @Column({ type: 'text', nullable: true })
+  instructions: string;  // For recipes with manual instructions (nullable)
+
+  @ManyToOne(() => User, (user) => user.recipes)
+  user: User;
+
+  @OneToMany(() => RecipeIngredient, (recipeIngredient) => recipeIngredient.recipe)
+  ingredients: RecipeIngredient[];
+
+  @OneToMany(() => RecipeGroceryList, (recipeGroceryList) => recipeGroceryList.recipe)
+  recipeGroceryLists: RecipeGroceryList[]; // grocery lists this reecipe has been added to
+
+  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+  createdAt: Date;
+
+  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP', onUpdate: 'CURRENT_TIMESTAMP' })
+  updatedAt: Date;
 }

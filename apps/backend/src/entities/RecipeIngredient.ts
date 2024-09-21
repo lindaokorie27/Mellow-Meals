@@ -1,22 +1,24 @@
-import {Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, OneToOne, JoinColumn} from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
+import { RecipeList } from './RecipeList';
+import { Ingredient } from './Ingredient';
 
-import { Recipe } from "./Recipe";
-import { Ingredient } from "./Ingredients";
-
-@Entity()
+@Entity('recipe_ingredients')
 export class RecipeIngredient {
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
-    @PrimaryGeneratedColumn("uuid")
-    id: string;
+  @Column({ type: 'varchar', length: 255 })
+  name: string;  // Name of the ingredient
 
-    @OneToOne(() => Recipe)
-    @JoinColumn()
-    recipeId: string;
+  @Column({ type: 'varchar', length: 50 })
+  quantity: string;  // The amount/measurement of the ingredient
 
-    @OneToOne(() => Ingredient)
-    @JoinColumn()
-    ingredientId: string;
+  @Column({ type: 'varchar', length: 50 })
+  unit: string;  // e.g., grams, liters, cups
 
-    @Column({ nullable: false })
-    quantity: number;
+  @ManyToOne(() => RecipeList, (recipeList) => recipeList.ingredients)
+  recipe: RecipeList;  // Links to the RecipeList entity
+
+  @ManyToOne(() => Ingredient, (ingredient) => ingredient.recipeIngredients, { onDelete: 'CASCADE' })
+  ingredient: Ingredient; // Links to the Ingredient entity
 }

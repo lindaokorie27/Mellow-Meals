@@ -1,26 +1,34 @@
-import {Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn} from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+import { GroceryList } from './GroceryList';
+import { RecipeList } from './RecipeList';
+import { UserIngredient } from './UserIngredient';
 
-@Entity()
+@Entity('users')
 export class User {
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
-    @PrimaryGeneratedColumn("uuid")
-    id: string;
+  @Column({ type: 'varchar', length: 255 })
+  name: string;
 
-    @Column({ nullable: false })
-    firstName: string;
+  @Column({ type: 'varchar', length: 255, unique: true })
+  email: string;
 
-    @Column()
-    lastName: string;
+  @Column({ type: 'varchar' })
+  passwordHash: string;
 
-    @Column({ nullable: false })
-    email: string;
+  @OneToMany(() => GroceryList, (groceryList) => groceryList.user)
+  groceryLists: GroceryList[];
 
-    @Column({ nullable: false })
-    password: string;
+  @OneToMany(() => RecipeList, (recipe) => recipe.user)
+  recipes: RecipeList[];  // Link to recipes created by this user
 
-    @CreateDateColumn()
-    createdAt: Date;
-  
-    @UpdateDateColumn()
-    updatedAt: Date;
+  @OneToMany(() => UserIngredient, (userIngredient) => userIngredient.user)
+  userIngredients: UserIngredient[];
+
+  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+  createdAt: Date;
+
+  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP', onUpdate: 'CURRENT_TIMESTAMP' })
+  updatedAt: Date;
 }
