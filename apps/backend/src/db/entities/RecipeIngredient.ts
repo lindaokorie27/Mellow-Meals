@@ -10,8 +10,8 @@ export class RecipeIngredient {
   @Column({ type: 'varchar', length: 255 })
   name: string;  // Name of the ingredient
 
-  @Column({ type: 'varchar', length: 50 })
-  quantity: string;  // The amount/measurement of the ingredient
+  @Column({ type: 'float' })
+  quantity: number;  // The amount/measurement of the ingredient
 
   @Column({ type: 'varchar', length: 50 })
   unit: string;  // e.g., grams, liters, cups
