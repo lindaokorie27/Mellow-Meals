@@ -54,6 +54,18 @@
         }
       }
     },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "options": {
+        "jestConfig": "libs/my-lib/jest.config.ts",
+        "passWithNoTests": true
+      },
+      "configurations": {
+        "ci": {
+          "ci": true
+        }
+      }
+    },
     "seed": {
       "executor": "nx:run-commands",
       "options": {
