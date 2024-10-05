@@ -67,7 +67,7 @@ jobs:
         cache: 'pnpm'
 
     - name: Install Dependencies
-      run: pnpm install
+      run: pnpm install --frozen-lockfile
       - uses: nrwl/nx-set-shas@v4
 
     - name: Lint, Test, and Build Frontend
