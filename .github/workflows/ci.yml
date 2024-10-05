@@ -45,12 +45,11 @@ jobs:
     name: Frontend Pipeline
     runs-on: ubuntu-latest
     if: contains(github.event.head_commit.message, 'frontend') || contains(github.event.pull_request.head.ref, 'frontend')
-
     steps:
     - uses: actions/checkout@v4
       with:
         fetch-depth: 0
-    
+
     - uses: pnpm/action-setup@v4
       with:
         version: 9
@@ -65,12 +64,12 @@ jobs:
       with:
         node-version: 20
         cache: 'pnpm'
+
     - name: Install Dependencies
       run: pnpm install --frozen-lockfile
-      - uses: nrwl/nx-set-shas@v4
 
     - name: Lint, Test, and Build Frontend
-      run: pnpm exec nx affected -t lint test build --tag=frontend --skip-nx-cache
+      run: pnpm exec nx affected -t lint test build --tag=frontend
 
 #  main:
 #     runs-on: ubuntu-latest
