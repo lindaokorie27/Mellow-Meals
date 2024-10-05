@@ -39,7 +39,9 @@ jobs:
       run: pnpm install
 
     - name: Lint, Test, and Build Backend
-      run: pnpm exec nx affected -t lint test build --tag=backend
+    - run: pnpm exec nx affected --target=lint --tag=backend
+    - run: pnpm exec nx affected --target=test --tag=backend
+    - run: pnpm exec nx affected --target=build --tag=backend
   
   frontend:
     name: Frontend Pipeline
