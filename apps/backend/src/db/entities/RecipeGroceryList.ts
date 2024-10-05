@@ -7,9 +7,15 @@ export class RecipeGroceryList {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @ManyToOne(() => RecipeList, (recipe) => recipe.recipeGroceryLists, { onDelete: 'CASCADE' })
+  @ManyToOne(() => RecipeList, (recipe) => recipe.recipeGroceryLists, {
+    onDelete: 'CASCADE',
+  })
   recipe: RecipeList;
 
-  @ManyToOne(() => GroceryList, (groceryList) => groceryList.recipeGroceryLists, { onDelete: 'CASCADE' })
+  @ManyToOne(
+    () => GroceryList,
+    (groceryList) => groceryList.recipeGroceryLists,
+    { onDelete: 'CASCADE' }
+  )
   groceryList: GroceryList;
 }

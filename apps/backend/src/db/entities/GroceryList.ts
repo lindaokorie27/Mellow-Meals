@@ -1,4 +1,10 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToOne,
+  OneToMany,
+} from 'typeorm';
 import { User } from './User';
 import { GroceryListItem } from './GroceryListItem';
 import { RecipeGroceryList } from './RecipeGroceryList';
@@ -17,15 +23,27 @@ export class GroceryList {
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   createdAt: Date;
 
-  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP', onUpdate: 'CURRENT_TIMESTAMP' })
+  @Column({
+    type: 'timestamp',
+    default: () => 'CURRENT_TIMESTAMP',
+    onUpdate: 'CURRENT_TIMESTAMP',
+  })
   updatedAt: Date;
 
   @ManyToOne(() => User, (user) => user.groceryLists)
   user: User;
 
-  @OneToMany(() => GroceryListItem, (groceryListItem) => groceryListItem.groceryList, { cascade: true })
+  @OneToMany(
+    () => GroceryListItem,
+    (groceryListItem) => groceryListItem.groceryList,
+    { cascade: true }
+  )
   groceryListItems: GroceryListItem[];
 
-  @OneToMany(() => RecipeGroceryList, (recipeGroceryList) => recipeGroceryList.groceryList, { cascade: true })
+  @OneToMany(
+    () => RecipeGroceryList,
+    (recipeGroceryList) => recipeGroceryList.groceryList,
+    { cascade: true }
+  )
   recipeGroceryLists: RecipeGroceryList[];
 }

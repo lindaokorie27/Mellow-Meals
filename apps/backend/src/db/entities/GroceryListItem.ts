@@ -11,8 +11,8 @@ export class GroceryListItem {
   quantity: number;
 
   @Column({ type: 'varchar', length: 50 })
-  unit: string;  // e.g., grams, liters, cups
-  
+  unit: string; // e.g., grams, liters, cups
+
   @ManyToOne(() => GroceryList, (groceryList) => groceryList.groceryListItems)
   groceryList: GroceryList;
 

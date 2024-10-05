@@ -1,4 +1,10 @@
-import { PrimaryGeneratedColumn, Column, ManyToOne, OneToMany, Entity } from 'typeorm';
+import {
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToOne,
+  OneToMany,
+  Entity,
+} from 'typeorm';
 import { User } from './User';
 import { RecipeIngredient } from './RecipeIngredient';
 import { RecipeGroceryList } from './RecipeGroceryList';
@@ -15,23 +21,35 @@ export class RecipeList {
   description: string;
 
   @Column({ type: 'text', nullable: true })
-  link: string;  // For recipes added by link, this stores the URL (nullable)
+  link: string; // For recipes added by link, this stores the URL (nullable)
 
   @Column({ type: 'text', nullable: true })
-  instructions: string;  // For recipes with manual instructions (nullable)
+  instructions: string; // For recipes with manual instructions (nullable)
 
   @ManyToOne(() => User, (user) => user.recipes)
   user: User;
 
-  @OneToMany(() => RecipeIngredient, (recipeIngredient) => recipeIngredient.recipe, { cascade: true })
+  @OneToMany(
+    () => RecipeIngredient,
+    (recipeIngredient) => recipeIngredient.recipe,
+    { cascade: true }
+  )
   ingredients: RecipeIngredient[];
 
-  @OneToMany(() => RecipeGroceryList, (recipeGroceryList) => recipeGroceryList.recipe, { cascade: true })
+  @OneToMany(
+    () => RecipeGroceryList,
+    (recipeGroceryList) => recipeGroceryList.recipe,
+    { cascade: true }
+  )
   recipeGroceryLists: RecipeGroceryList[]; // grocery lists this reecipe has been added to
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   createdAt: Date;
 
-  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP', onUpdate: 'CURRENT_TIMESTAMP' })
+  @Column({
+    type: 'timestamp',
+    default: () => 'CURRENT_TIMESTAMP',
+    onUpdate: 'CURRENT_TIMESTAMP',
+  })
   updatedAt: Date;
 }

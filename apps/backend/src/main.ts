@@ -17,11 +17,13 @@ app.get('/', (req, res) => {
 AppDataSource.initialize()
   .then(async () => {
     app.listen(port, host, () => {
-        console.log(`[ ready ] http://${host}:${port}`);
-      });
-    console.log("Data Source has been initialized!");
+      console.log(`[ ready ] http://${host}:${port}`);
+    });
+    console.log('Data Source has been initialized!');
   })
-  .catch((error) => console.error("Error during Data Source initialization:",error));
+  .catch((error) =>
+    console.error('Error during Data Source initialization:', error)
+  );
 
 // Handle errors
 app.use(handleError);
