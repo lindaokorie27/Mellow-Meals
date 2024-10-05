@@ -2,7 +2,7 @@ import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 import { RecipeIngredient } from './RecipeIngredient';
 import { GroceryListItem } from './GroceryListItem';
 
-@Entity('ingredients')
+@Entity()
 export class Ingredient {
   @PrimaryGeneratedColumn('uuid')
   id: string;
@@ -13,9 +13,9 @@ export class Ingredient {
   @Column({ type: 'enum', enum: ['default', 'user'], default: 'default' })
   type: 'default' | 'user'; // Default ingredient or user-added ingredient
 
-  @OneToMany(() => RecipeIngredient, (recipeIngredient) => recipeIngredient.ingredient)
+  @OneToMany(() => RecipeIngredient, (recipeIngredient) => recipeIngredient.ingredient, { cascade: true })
   recipeIngredients: RecipeIngredient[]; // Link to ingredients from recipes created by this user
 
-  @OneToMany(() => GroceryListItem, (groceryListItem) => groceryListItem.ingredient)
+  @OneToMany(() => GroceryListItem, (groceryListItem) => groceryListItem.ingredient, { cascade: true })
   groceryListItems: GroceryListItem[];
 }

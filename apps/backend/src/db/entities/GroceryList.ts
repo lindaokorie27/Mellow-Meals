@@ -3,7 +3,7 @@ import { User } from './User';
 import { GroceryListItem } from './GroceryListItem';
 import { RecipeGroceryList } from './RecipeGroceryList';
 
-@Entity('grocery_lists')
+@Entity()
 export class GroceryList {
   @PrimaryGeneratedColumn('uuid')
   id: string;
@@ -23,9 +23,9 @@ export class GroceryList {
   @ManyToOne(() => User, (user) => user.groceryLists)
   user: User;
 
-  @OneToMany(() => GroceryListItem, (groceryListItem) => groceryListItem.groceryList)
+  @OneToMany(() => GroceryListItem, (groceryListItem) => groceryListItem.groceryList, { cascade: true })
   groceryListItems: GroceryListItem[];
 
-  @OneToMany(() => RecipeGroceryList, (recipeGroceryList) => recipeGroceryList.groceryList)
+  @OneToMany(() => RecipeGroceryList, (recipeGroceryList) => recipeGroceryList.groceryList, { cascade: true })
   recipeGroceryLists: RecipeGroceryList[];
 }

@@ -2,7 +2,7 @@ import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
 import { GroceryList } from './GroceryList';
 import { Ingredient } from './Ingredient';
 
-@Entity('grocery_list_items')
+@Entity()
 export class GroceryListItem {
   @PrimaryGeneratedColumn('uuid')
   id: string;
