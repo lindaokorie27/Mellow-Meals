@@ -40,9 +40,9 @@ jobs:
 
     - name: Lint, Test, and Build Backend
       run: |
-        pnpm exec nx affected --target=lint --tag=backend --verbose
-        pnpm exec nx affected --target=test --tag=backend --verbose
-        pnpm exec nx affected --target=build --tag=backend --verbose
+        pnpm exec nx affected --target=lint --tag=backend --skip-nx-cache --verbose
+        pnpm exec nx affected --target=test --tag=backend  --skip-nx-cache --verbose
+        pnpm exec nx affected --target=build --tag=backend  --skip-nx-cache --verbose
   
   frontend:
     name: Frontend Pipeline
