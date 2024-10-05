@@ -11,7 +11,74 @@ permissions:
   contents: read
 
 jobs:
-  main:
+  backend:
+    name: Backend Pipeline
+    runs-on: ubuntu-latest
+    if: contains(github.event.head_commit.message, 'backend') || contains(github.event.pull_request.head.ref, 'backend')
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - uses: pnpm/action-setup@v4
+      with:
+        version: 9
+
+    # This enables task distribution via Nx Cloud
+    # Run this command as early as possible, before dependencies are installed
+    # Learn more at https://nx.dev/ci/reference/nx-cloud-cli#npx-nxcloud-startcirun
+    - run: pnpm dlx nx-cloud start-ci-run --distribute-on="3 linux-medium-js" --stop-agents-after="e2e-ci"
+
+    # Cache node_modules
+    - uses: actions/setup-node@v4
+      with:
+        node-version: 20
+        cache: 'pnpm'
+
+    - name: Install Dependencies
+      run: pnpm install
+
+    - name: Lint, Test, and Build Backend
+      run: |
+        pnpm exec nx affected --target=lint --tag=backend
+        pnpm exec nx affected --target=test --tag=backend
+        pnpm exec nx affected --target=build --tag=backend
+  
+  frontend:
+    name: Frontend Pipeline
+    runs-on: ubuntu-latest
+    if: contains(github.event.head_commit.message, 'frontend') || contains(github.event.pull_request.head.ref, 'frontend')
+
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+    
+    - uses: pnpm/action-setup@v4
+      with:
+        version: 9
+
+    # This enables task distribution via Nx Cloud
+    # Run this command as early as possible, before dependencies are installed
+    # Learn more at https://nx.dev/ci/reference/nx-cloud-cli#npx-nxcloud-startcirun
+    - run: pnpm dlx nx-cloud start-ci-run --distribute-on="3 linux-medium-js" --stop-agents-after="e2e-ci"
+
+    # Cache node_modules
+    - uses: actions/setup-node@v4
+      with:
+        node-version: 20
+        cache: 'pnpm'
+
+    - name: Install Dependencies
+      run: pnpm install
+      uses: nrwl/nx-set-shas@v4
+
+    - name: Lint, Test, and Build Frontend
+      run: |
+        pnpm exec nx affected --target=lint --tag=frontend --skip-nx-cache
+        pnpm exec nx affected --target=test --tag=frontend --skip-nx-cache
+        pnpm exec nx affected --target=build --tag=frontend --skip-nx-cache
+ main:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
