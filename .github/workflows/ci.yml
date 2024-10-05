@@ -68,7 +68,7 @@ jobs:
 
     - name: Install Dependencies
       run: pnpm install
-      uses: nrwl/nx-set-shas@v4
+      - uses: nrwl/nx-set-shas@v4
 
     - name: Lint, Test, and Build Frontend
       run: pnpm exec nx affected -t lint test build --tag=frontend --skip-nx-cache
