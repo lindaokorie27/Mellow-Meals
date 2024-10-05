@@ -3,7 +3,7 @@
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "apps/backend/src",
   "projectType": "application",
-  "tags": [],
+  "tags": ["backend", "node"],
   "targets": {
     "build": {
       "executor": "@nx/esbuild:esbuild",
@@ -52,6 +52,19 @@
         "production": {
           "buildTarget": "backend:build:production"
         }
+      }
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "options": {
+        "jestConfig": "apps/backend/jest.config.ts",
+        "passWithNoTests": true
+      }
+    },
+    "seed": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "ts-node apps/backend/src/db/seed.ts"
       }
     }
   }
