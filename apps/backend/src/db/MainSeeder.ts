@@ -24,6 +24,7 @@ export class MainSeeder {
         Array(10).fill("").map(async () => {
           const groceryList = await factoryManager.get(GroceryList).make();
           groceryList.user = faker.helpers.arrayElement(users); // Assign a random user
+          groceryList.recipeGroceryLists = []; // create empty recipeGroceryList column
           return await transactionalEntityManager.save(GroceryList, groceryList);
         })
       );
@@ -42,6 +43,8 @@ export class MainSeeder {
         Array(5).fill("").map(async () => {
           const recipe = await factoryManager.get(RecipeList).make();
           recipe.user = faker.helpers.arrayElement(users); // Assign a random user
+          recipe.recipeGroceryLists = []; // create empty recipeGroceryList column
+          recipe.ingredients = []; // create empty recipeIngredient column
           return await transactionalEntityManager.save(RecipeList, recipe);
         })
       );
@@ -52,6 +55,11 @@ export class MainSeeder {
           const recipeGroceryList = await factoryManager.get(RecipeGroceryList).make();
           recipeGroceryList.recipe = faker.helpers.arrayElement(recipes); // Assign a random recipe
           recipeGroceryList.groceryList = faker.helpers.arrayElement(groceryLists); // Assign a random grocery list
+
+          // push the relations to both sides before saving
+          recipeGroceryList.recipe.recipeGroceryLists.push(recipeGroceryList)
+          recipeGroceryList.groceryList.recipeGroceryLists.push(recipeGroceryList);
+        
           return await transactionalEntityManager.save(RecipeGroceryList, recipeGroceryList);
         })
       );
@@ -62,6 +70,10 @@ export class MainSeeder {
           const recipeIngredient = await factoryManager.get(RecipeIngredient).make();
           recipeIngredient.ingredient = faker.helpers.arrayElement(ingredients); // Assign a random ingredient
           recipeIngredient.recipe = faker.helpers.arrayElement(recipes); // Assign a random recipe
+
+          // push the relations to both sides before saving
+          recipeIngredient.recipe.ingredients.push(recipeIngredient);
+
           return await transactionalEntityManager.save(RecipeIngredient, recipeIngredient);
         })
       );
@@ -75,27 +87,6 @@ export class MainSeeder {
           return await transactionalEntityManager.save(GroceryListItem, groceryListItem);
         })
       );
-
-      // Link grocery lists and recipes to recipe grocery lists
-      recipes.forEach(recipe => {
-        if (!recipe.recipeGroceryLists) {
-          recipe.recipeGroceryLists = [];
-        }
-        const linkedGroceryList = faker.helpers.arrayElement(recipeGroceryLists);
-        if (linkedGroceryList) {
-          recipe.recipeGroceryLists.push(linkedGroceryList);
-        }
-      });
-
-      groceryLists.forEach(groceryList => {
-        if (!groceryList.recipeGroceryLists) {
-          groceryList.recipeGroceryLists = [];
-        }
-        const linkedRecipeList = faker.helpers.arrayElement(recipeGroceryLists);
-        if (linkedRecipeList) {
-          groceryList.recipeGroceryLists.push(linkedRecipeList);
-        }
-      });
 
       // Save all entities in one go (already saved where necessary)
       await Promise.all([
